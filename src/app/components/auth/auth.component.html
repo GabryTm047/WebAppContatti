@@ -1,0 +1,13 @@
+<form #form="ngForm" (ngSubmit)="this.as.login(this.model.username, this.model.password)">
+    <label for="username">username</label>
+    <input type="text" name="username" title="Username" required [(ngModel)]="this.model.username" #username="ngModel">
+    <div *ngIf="username.invalid && (username.dirty || username.touched) && username.errors" class="validation-ctn">
+        <div *ngIf="username.errors['required']">Username è obbligatorio</div>
+    </div>
+    <label for="password">password</label>
+    <input type="password" name="password" title="password" required [(ngModel)]="this.model.password" #password="ngModel">
+    <div *ngIf="password.invalid && (password.dirty || password.touched) && password.errors">
+        <div *ngIf="password.errors['required']">Password è obbligatorio</div>
+    </div>
+    <button type="submit" [disabled]="form.invalid">Login</button>
+</form>

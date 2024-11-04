@@ -1,0 +1,20 @@
+<div [appHighlight]="appColor">{{title}}</div>
+
+<button (click)="changeColor()">cambia</button>
+
+<button (click)="this.as.logout()">Logout</button>
+
+<button (click)="addPanelToggle()">Aggiungi un nuovo contatto</button>
+
+@if (this.newContact) {
+<h1>Nuovo contatto: </h1>
+<app-card-contact [editMode]="true" (hideAddPanel)="addPanelToggle()"></app-card-contact>
+}
+
+<app-query-filter (apply)="applyFilterOnApp($event)" [filter]="appFilter"></app-query-filter>
+<button (click)="loadFilter()">Filtro salvato</button>
+
+<h1>Contatti: </h1>
+<app-card-contact *ngFor="let contact of this.cs.contacts$ | async" [model]="contact"></app-card-contact>
+
+

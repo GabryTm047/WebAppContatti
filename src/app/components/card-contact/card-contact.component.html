@@ -1,0 +1,167 @@
+<div class="card-container">
+    @if (this.model && !this.editMode) {
+    <div>{{ model.Name }} {{ model.Surname }}</div>
+    <div>Età: {{ model.Age }}</div>
+    <!-- <div *ngIf="model.Emails.length <=  1">
+        <div>Non ce nulla</div>
+    </div> -->
+    <div *ngFor="let mail of model.Emails">
+        <div>{{mail.Value}}</div>
+        
+    </div>
+    <div class="btn-container">
+        <button class="modify-btn" title="Modify" (click)="editViewToggle()">
+            Modify
+        </button>
+        <button class="delete-btn" title="Delete" (click)="delete()">Delete</button>
+    </div>
+    } @else {
+    @if (this.editMode) {
+    <!-- <form #myForm="ngForm" (ngSubmit)="upsert()">
+        <div class="form-group mb-3">
+            <label class="form-label" for="nome">Nome</label>
+            <input class="form-control" type="text" name="nome" title="nome" required [appForbiddenNames]="invalidName"
+                minlength="3" [(ngModel)]="this.modelToEdit.name" #name="ngModel" />
+            <div *ngIf="name.invalid && (name.dirty || name.touched) && name.errors" class="validation-ctn">
+                <div *ngIf="name.errors['required']" class="validation-item required alert alert-danger">Nome è
+                    obbligatorio</div>
+                <div *ngIf="name.errors['minlength']" class="validation-item required alert alert-danger">Nome deve
+                    essere minimo 3</div>
+                <div *ngIf="name.errors['appForbiddenNames']" class="validation-item required alert alert-danger">
+                    {{name.errors['appForbiddenNames']}}</div>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" for="cognome">Cognome</label>
+            <input class="form-control" type="text" name="cognome" title="cognome" required
+                [(ngModel)]="this.modelToEdit.surname" #surname="ngModel" />
+            <div *ngIf="surname.invalid && (surname.dirty || surname.touched) && surname.errors" class="validation-ctn">
+                <div *ngIf="surname.errors['required']" class="validation-item required alert alert-danger">Cognome è
+                    obbligatorio</div>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" for="eta">Età</label>
+            <input class="form-control" type="number" name="eta" title="eta" min="16" required
+                [(ngModel)]="this.modelToEdit.age" #age="ngModel" />
+            <div *ngIf="age.invalid && (age.dirty || age.touched) && age.errors" class="validation-ctn">
+                <div *ngIf="age.errors['required']" class="validation-item required alert alert-danger">Età è
+                    obbligatoria</div>
+                <div *ngIf="age.errors['min']" class="validation-item required alert alert-danger">Età deve essere
+                    maggiore di 16</div>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" name="email" title="email" required appEmailValidator
+                [(ngModel)]="this.modelToEdit.email" #email="ngModel" />
+            <div *ngIf="email.invalid && (email.dirty || email.touched) && email.errors" class="validation-ctn">
+                <div *ngIf="email.errors['required']" class="validation-item required alert alert-danger">Email è
+                    obbligatorio</div>
+                <div *ngIf="email.errors['appEmailValidator']" class="validation-item required alert alert-danger">
+                    {{email.errors['appEmailValidator']}}</div>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" for="cellulare">Cellulare</label>
+            <input class="form-control" type="text" name="cellulare" title="cellulare" required
+                [(ngModel)]="this.modelToEdit.phone" #phone="ngModel" />
+            <div *ngIf="phone.invalid && (phone.dirty || phone.touched) && phone.errors" class="validation-ctn">
+                <div *ngIf="phone.errors['required']" class="validation-item required alert alert-danger">Cellulare è
+                    obbligatorio</div>
+            </div>
+        </div>
+        <div class="btn-container">
+            <button type="button" class="btn btn-secondary cancel-btn" title="Annulla" (click)="editViewToggle()">
+                Annulla
+            </button>
+            <button type="submit" class="btn btn-primary save-btn" title="Salva" [disabled]="myForm.invalid">
+                Salva
+            </button>
+        </div>
+    </form> -->
+
+    <form [formGroup]="fg" (ngSubmit)="upsert()">
+
+        <div class="form-group mb-3">
+            <label class="form-label" for="nome">Nome</label>
+            <input class="form-control" type="text" fg.controls.name="nome" title="nome"
+                [formControl]="fg.controls.name" />
+
+            <div *ngIf="fg.controls.name.invalid && (fg.controls.name.dirty || fg.controls.name.touched) && fg.controls.name.errors"
+                class="validation-ctn">
+                <div *ngIf="fg.controls.name.errors['required']" class="validation-item required alert alert-danger">
+                    Nome è
+                    obbligatorio</div>
+                <div *ngIf="fg.controls.name.errors['minlength']" class="validation-item required alert alert-danger">
+                    Nome deve
+                    essere minimo 3</div>
+                <div *ngIf="fg.controls.name.errors['appForbiddenNames']"
+                    class="validation-item required alert alert-danger">
+                    {{fg.controls.name.errors['appForbiddenNames']}}</div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label" for="cognome">Cognome</label>
+            <input class="form-control" type="text" name="cognome" title="cognome"
+                [formControl]="fg.controls.surname" />
+
+            <div *ngIf="fg.controls.surname.invalid && (fg.controls.surname.dirty || fg.controls.surname.touched) && fg.controls.surname.errors"
+                class="validation-ctn">
+                <div *ngIf="fg.controls.surname.errors['required']" class="validation-item required alert alert-danger">
+                    Cognome è
+                    obbligatorio</div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label" for="eta">Età</label>
+            <input class="form-control" type="number" name="eta" title="eta" [formControl]="fg.controls.age" />
+
+            <div *ngIf="fg.controls.age.invalid && (fg.controls.age.dirty || fg.controls.age.touched) && fg.controls.age.errors"
+                class="validation-ctn">
+                <div *ngIf="fg.controls.age.errors['required']" class="validation-item required alert alert-danger">Età
+                    è
+                    obbligatoria</div>
+                <div *ngIf="fg.controls.age.errors['min']" class="validation-item required alert alert-danger">Età deve
+                    essere
+                    maggiore di 16</div>
+            </div>
+        </div>
+        <div class="form-group mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" name="email" title="email" [formControl]="fg.controls.emails" />
+            <div *ngIf="fg.controls.emails.invalid && (fg.controls.emails.dirty || fg.controls.emails.touched) && fg.controls.emails.errors"
+                class="validation-ctn">
+                <div *ngIf="fg.controls.emails.errors!['required']" class="validation-item required alert alert-danger">
+                    Email è
+                    obbligatorio</div>
+                <div *ngIf="fg.controls.emails.errors['appEmailValidator']"
+                    class="validation-item required alert alert-danger">
+                    {{fg.controls.emails.errors['appEmailValidator']}}</div>
+            </div>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label" for="cellulare">Cellulare</label>
+            <input class="form-control" type="text" name="cellulare" title="cellulare"
+                [formControl]="fg.controls.phones" />
+
+            <div *ngIf="fg.controls.phones.invalid && (fg.controls.phones.dirty || fg.controls.phones.touched) && fg.controls.phones.errors"
+                class="validation-ctn">
+                <div *ngIf="fg.controls.phones.errors['required']" class="validation-item required alert alert-danger">
+                    Cellulare è
+                    obbligatorio</div>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button type="button" class="btn btn-secondary cancel-btn" title="Annulla"
+                (click)="editViewToggle()">Annulla</button>
+            <button type="submit" class="btn btn-primary save-btn" title="Salva" [disabled]="fg.invalid">Salva</button>
+        </div>
+    </form>
+    }
+    }
+</div>
